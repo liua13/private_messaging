@@ -1,0 +1,51 @@
+{% extends "layout.html" %} {% block content %}
+<form name="login" action="" method="POST" novalidate class="form">
+  <fieldset>
+    <legend>Register</legend>
+    {{ registerForm.hidden_tag() }}
+    <p>
+      {{ registerForm.email.label }}<br />
+      {{ registerForm.email() }} {% for error in registerForm.email.errors %}
+      <span class="errorMessage">{{ error }}</span>
+      {% endfor %}
+    </p>
+    <p>
+      {{ registerForm.password.label }}<br />
+      {{ registerForm.password() }} {% for error in registerForm.password.errors
+      %}
+      <span class="errorMessage">{{ error }}</span>
+      {% endfor %}
+    </p>
+
+    <p>
+      {{ registerForm.passwordConfirm.label }}<br />
+      {{ registerForm.passwordConfirm() }} {% for error in
+      registerForm.passwordConfirm.errors %}
+      <span class="errorMessage">{{ error }}</span>
+      {% endfor %}
+    </p>
+
+    <p>
+      {{ registerForm.firstName.label }}<br />
+      {{ registerForm.firstName() }} {% for error in
+      registerForm.firstName.errors %}
+      <span class="errorMessage">{{ error }}</span>
+      {% endfor %}
+    </p>
+
+    <p>
+      {{ registerForm.lastName.label }}<br />
+      {{ registerForm.lastName() }} {% for error in registerForm.lastName.errors
+      %}
+      <span class="errorMessage">{{ error }}</span>
+      {% endfor %}
+    </p>
+
+    <p>
+      {{ registerForm.submit() }}
+    </p>
+  </fieldset>
+</form>
+
+Already have an account? <a href="{{url_for('login')}}">Login</a>
+{% endblock %}
