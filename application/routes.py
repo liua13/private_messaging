@@ -107,6 +107,7 @@ def message(form):
 
 @socketio.on("userConnected")
 def userConnected():
+    session.pop("currentChat", None)
     join_room(session.get("user").get("id"))
     chatRooms = db.session.query(ChatRoom).filter((ChatRoom.senderID == session.get("user").get("id")) | (ChatRoom.recipientID == session.get("user").get("id"))).all()
     allChats = []
@@ -117,8 +118,10 @@ def userConnected():
             userID = chatRoom.senderID
 
         recipientUser = db.session.query(User).filter((User.id == userID)).first()
-        if recipientUser:
-            allChats.append({"chatID": chatRoom.id, "userID": userID, "firstName": recipientUser.firstName})
+        lastMessage = db.session.query(Message).filter((Message.chatID == chatRoom.id)).first()
+        message = {"message": lastMessage.message, "datetime": json.dumps(lastMessage.datetime, default=stringifyDateTime)}
+        if recipientUser and lastMessage:
+            allChats.append({"chatID": chatRoom.id, "userID": userID, "firstName": recipientUser.firstName, "lastMessage": message})
     socketio.emit("chatRooms", allChats, room=session.get("user").get("id"))
 
 @socketio.on("changeChat")

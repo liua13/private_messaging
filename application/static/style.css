@@ -13,7 +13,7 @@ nav {
 
 .body {
   flex-grow: 1;
-  width: min(750px, 90vw);
+  width: min(900px, 90vw);
   margin: 0 auto;
   padding: 0px 0px;
   display: block;
