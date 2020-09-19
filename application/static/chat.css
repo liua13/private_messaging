@@ -41,8 +41,12 @@
   bottom: 0px;
 }
 
-.sendContainer input[type="text"] {
+.sendContainer textarea {
   flex-grow: 1;
+
+  border: none;
+  height: 25px;
+  resize: none;
 }
 
 .sendContainer input[type="submit"] {
@@ -66,6 +70,7 @@ li {
   border-radius: 10px;
   padding: 3px 10px;
   word-wrap: break-word;
+  word-break: break-word;
 }
 
 .messageContainer .date {

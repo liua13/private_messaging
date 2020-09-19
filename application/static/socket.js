@@ -3,6 +3,9 @@ $(document).ready(() => {
   // to do: show message + time instead of userID for chatContainer (for sender + database)
   // to do: send new message
 
+  // Handover Protocol, One-Time Notifications, Private Replies, Quick Replies, and the Extension SDK.
+  // https://fbmessaging3.devpost.com/?utm_source=devpost&utm_medium=newsletter
+
   const domain = "http://localhost:5000";
   const socket = io(`${domain}`);
 
@@ -94,12 +97,8 @@ $(document).ready(() => {
   // });
 
   socket.on("sentMessage", (data) => {
-    const { message, datetime } = data;
-    displayMessage(datetime, message, "sentMessage");
-
-    $(".messagesContainer").scrollTop(
-      $(".messagesContainer").prop("scrollHeight")
-    );
+    const { message, datetime, chatID } = data;
+    newMessage(chatID, datetime, message, "sentMessage");
   });
 
   socket.on("receivedMessage", (data) => {
@@ -107,13 +106,17 @@ $(document).ready(() => {
   });
 
   socket.on("displayReceivedMessage", (data) => {
-    const { message, datetime } = data;
-    displayMessage(datetime, message, "receivedMessage");
+    const { message, datetime, chatID } = data;
+    newMessage(chatID, datetime, message, "receivedMessage");
+  });
 
+  const newMessage = (chatID, datetime, message, messageType) => {
+    $(`.chatContainer[data-id="${chatID}"] .message`).html(message);
+    displayMessage(datetime, message, messageType);
     $(".messagesContainer").scrollTop(
       $(".messagesContainer").prop("scrollHeight")
     );
-  });
+  };
 
   socket.on("displayNotification", (data) => {
     const { senderID, chatID, firstName, message, datetime } = data;

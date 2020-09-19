@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from wtforms.widgets import PasswordInput
 
@@ -30,7 +30,7 @@ class SendMessageForm(FlaskForm):
     datetime = StringField("Date", validators=[DataRequired()])
     chatID = IntegerField("ChatID", validators=[DataRequired()])
     recipientID = IntegerField("To:", render_kw={"placeholder": "No recipients"})
-    message = StringField("Message", validators=[DataRequired()], render_kw={"placeholder": "Message"})
+    message = TextAreaField("Message", validators=[DataRequired()], render_kw={"placeholder": "Message"})
     submit = SubmitField("Send")
 
     def validate_recipientID(self, recipientID):

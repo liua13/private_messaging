@@ -99,7 +99,7 @@ def message(form):
         db.session.add(newMessage)
         db.session.commit()
 
-        socketio.emit("sentMessage", {"recipientID": recipientID, "senderID": session.get("user").get("id"), "message": message, "datetime": datetime}, room=session.get("user").get("id"))
+        socketio.emit("sentMessage", {"chatID": chatID, "recipientID": recipientID, "senderID": session.get("user").get("id"), "message": message, "datetime": datetime}, room=session.get("user").get("id"))
 
         user = db.session.query(User).filter((User.id == session["user"]["id"])).first()
 
@@ -118,8 +118,9 @@ def userConnected():
             userID = chatRoom.senderID
 
         recipientUser = db.session.query(User).filter((User.id == userID)).first()
-        lastMessage = db.session.query(Message).filter((Message.chatID == chatRoom.id)).first()
+        lastMessage = db.session.query(Message).filter((Message.chatID == chatRoom.id)).order_by(Message.datetime.desc()).first()
         message = {"message": lastMessage.message, "datetime": json.dumps(lastMessage.datetime, default=stringifyDateTime)}
+
         if recipientUser and lastMessage:
             allChats.append({"chatID": chatRoom.id, "userID": userID, "firstName": recipientUser.firstName, "lastMessage": message})
     socketio.emit("chatRooms", allChats, room=session.get("user").get("id"))
